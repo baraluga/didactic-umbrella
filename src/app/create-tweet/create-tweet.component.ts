@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-create-tweet',
@@ -6,7 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-tweet.component.scss'],
 })
 export class CreateTweetComponent {
+  tweet = '';
+
   onPostTweet(): void {
-    console.log('tweet: hello baby`');
+    console.log(this.buildTweet());
+  }
+
+  private buildTweet(): string {
+    return `tweet: ${this.tweet}`;
   }
 }
