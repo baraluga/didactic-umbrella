@@ -22,4 +22,13 @@ describe('CreateTweetComponent', () => {
     const inputElement = compiled.querySelector('input[data-test="tweet"]');
     expect(inputElement).toBeTruthy();
   });
+
+  it('should show the postTweet button', () => {
+    const compiled = TestBed.createComponent(CreateTweetComponent)
+      .nativeElement as HTMLElement;
+    const buttonElement = compiled.querySelector(
+      'button[data-test="postTweet"]'
+    );
+    expect(buttonElement).toBeTruthy();
+  });
 });
