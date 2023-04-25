@@ -1,27 +1,24 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [AppComponent],
-    }).compileComponents();
+  const create = createComponentFactory({
+    component: AppComponent,
+    imports: [AppModule],
+    declareComponent: false,
+  });
+  let spec: Spectator<AppComponent>;
+
+  beforeEach(() => {
+    spec = create();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-
-    expect(app).toBeTruthy();
+  it('should show createTweet component', () => {
+    expect(spec.query('[data-test="createTweet"]')).toExist();
   });
 
-  it('should show the sampleComponent', () => {
-    const compiled = TestBed.createComponent(AppComponent)
-      .nativeElement as HTMLElement;
-    expect(
-      compiled.querySelector('[data-test="sampleComponent"]')
-    ).toBeTruthy();
+  it('should show tweets component', () => {
+    expect(spec.query('app-tweets')).toExist();
   });
 });
