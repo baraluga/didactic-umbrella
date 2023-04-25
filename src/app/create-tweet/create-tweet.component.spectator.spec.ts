@@ -1,6 +1,7 @@
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { CreateTweetComponent } from './create-tweet.component';
 import { CreateTweetModule } from './create-tweet.module';
+import { TweetUtils } from './create-tweet.utils';
 
 describe('CreateTweetComponent (via Spectator)', () => {
   const create = createComponentFactory({
@@ -25,10 +26,10 @@ describe('CreateTweetComponent (via Spectator)', () => {
     expect(spectator.query('button[data-test="postTweet"]')).toBeTruthy();
   });
 
-  it('should log the inputted tweet on click of postTweet button', () => {
+  it('should alert the inputted tweet on click of postTweet button', () => {
     const INPUT_TWEET = 'hello achi';
     spectator.typeInElement(INPUT_TWEET, 'input[data-test="tweet"]');
-    const logSpy = spyOn(console, 'log');
+    const logSpy = spyOn(TweetUtils, 'alertTweet');
     spectator.click('button[data-test="postTweet"]');
     expect(logSpy).toHaveBeenCalledWith(jasmine.stringContaining(INPUT_TWEET));
   });
