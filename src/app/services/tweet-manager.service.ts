@@ -24,6 +24,10 @@ export class TweetManagerService {
     return Object.values(this.tweetsMap);
   }
 
+  delete(id: string): void {
+    delete this.tweetsMap[id];
+  }
+
   private listTweets(): string[] {
     return this.getListOfTweets().map((tweet) => tweet.message);
   }
