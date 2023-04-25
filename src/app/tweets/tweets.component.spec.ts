@@ -1,7 +1,7 @@
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { TweetManagerService } from '../services';
 import { TweetsComponent } from './tweets.component';
 import { TweetsModule } from './tweets.module';
-import { TweetManagerService } from '../services';
 
 describe('TweetsComponent', () => {
   const create = createComponentFactory({
@@ -12,7 +12,12 @@ describe('TweetsComponent', () => {
   let spec: Spectator<TweetsComponent>;
 
   beforeEach(() => {
-    spec = create({ detectChanges: false });
+    spec = create();
+    spyOn(spec.inject(TweetManagerService), 'getListOfTweets').and.returnValue([
+      { message: 'manam', id: '1st' },
+      { message: 'love it', id: '2nd' },
+    ]);
+    spec.detectChanges();
   });
 
   it('should show a list', () => {
@@ -20,13 +25,18 @@ describe('TweetsComponent', () => {
   });
 
   it('should show the tweets from service', () => {
-    spyOn(spec.inject(TweetManagerService), 'getListOfTweets').and.returnValue([
-      { message: 'manam' },
-      { message: 'love it' },
-    ]);
-    spec.detectChanges();
     const elIce = spec.queryAll('li');
     expect(elIce).toHaveLength(2);
     expect(elIce[1]).toHaveText('love it');
+  });
+
+  it('should show the delete tweet button for every tweet items', () => {
+    expect(spec.queryAll('button[data-test="removeTweet"]')).toHaveLength(2);
+  });
+
+  it('should delegate the deletion of a tweet on click of delete of a specific tweet', () => {
+    const deleteSpy = spyOn(spec.inject(TweetManagerService), 'delete');
+    spec.click('[data-test2="remove-2nd"]');
+    expect(deleteSpy).toHaveBeenCalledWith('2nd');
   });
 });

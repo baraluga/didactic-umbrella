@@ -13,4 +13,8 @@ export class TweetsComponent {
   }
 
   constructor(private readonly manager: TweetManagerService) {}
+
+  onRemoveTweet(id: string): void {
+    this.manager.delete(id);
+  }
 }

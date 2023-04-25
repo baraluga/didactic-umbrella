@@ -1,5 +1,12 @@
 <ul data-test="tweets">
   <li *ngFor="let tweet of tweets">
     {{ tweet.message }}
+    <button
+      data-test="removeTweet"
+      [attr.data-test2]="'remove-' + tweet.id"
+      (click)="onRemoveTweet(tweet.id)"
+    >
+      x
+    </button>
   </li>
 </ul>
