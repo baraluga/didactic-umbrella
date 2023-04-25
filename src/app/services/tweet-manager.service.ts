@@ -5,15 +5,10 @@ import { Tweet } from '../models';
   providedIn: 'root',
 })
 export class TweetManagerService {
-  private readonly tweets: string[] = [];
   private readonly tweetsMap: Record<string, Tweet> = {};
 
   add(tweet: string): void {
-    this.tweets.push(tweet);
-  }
-
-  getTweets(): string[] {
-    return this.listTweets();
+    this.addTweet(tweet);
   }
 
   addTweet(tweetMessage: string): void {
@@ -21,8 +16,16 @@ export class TweetManagerService {
     this.tweetsMap[tweet.id] = tweet;
   }
 
+  getTweets(): string[] {
+    return this.listTweets();
+  }
+
+  getListOfTweets(): Tweet[] {
+    return Object.values(this.tweetsMap);
+  }
+
   private listTweets(): string[] {
-    return Object.values(this.tweetsMap).map((tweet) => tweet.message);
+    return this.getListOfTweets().map((tweet) => tweet.message);
   }
 
   private buildTweet(message: string): Tweet {
