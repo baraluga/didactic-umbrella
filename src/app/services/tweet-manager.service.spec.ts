@@ -9,8 +9,8 @@ describe('TweetManagerService', () => {
     spec = create();
   });
 
-  it('should provide a way to add tweets', () => {
-    spec.service.add('Hello World!');
-    expect(spec.service.getTweets()).toContain('Hello World!');
+  it('should provide a way to add tweet by specifying the message', () => {
+    spec.service.addTweet('mom!');
+    expect(spec.service.getTweets()).toContain('mom!');
   });
 });
