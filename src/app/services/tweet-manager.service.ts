@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Tweet } from '../models';
+import { BehaviorSubject } from 'rxjs';
+import { Tweet, Tweets } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TweetManagerService {
-  private readonly tweetsMap: Record<string, Tweet> = {};
+  private readonly tweetsState = new BehaviorSubject<Tweets>({});
 
   add(tweet: string): void {
     this.addTweet(tweet);
@@ -13,7 +14,7 @@ export class TweetManagerService {
 
   addTweet(tweetMessage: string): void {
     const tweet = this.buildTweet(tweetMessage);
-    this.tweetsMap[tweet.id] = tweet;
+    this.addToTweets(tweetMessage);
   }
 
   getTweets(): string[] {
@@ -21,11 +22,25 @@ export class TweetManagerService {
   }
 
   getListOfTweets(): Tweet[] {
-    return Object.values(this.tweetsMap);
+    return Object.values(this.tweetsState.value);
   }
 
   delete(id: string): void {
-    delete this.tweetsMap[id];
+    this.removeFromTweets(id);
+  }
+
+  private removeFromTweets(id: string): void {
+    const current = this.tweetsState.value;
+    delete current[id];
+    this.tweetsState.next(current);
+  }
+
+  private addToTweets(message: string): void {
+    const builtTweet = this.buildTweet(message);
+    this.tweetsState.next({
+      ...this.tweetsState.value,
+      [builtTweet.id]: builtTweet,
+    });
   }
 
   private listTweets(): string[] {
