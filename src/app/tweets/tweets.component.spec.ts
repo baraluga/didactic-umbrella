@@ -20,9 +20,9 @@ describe('TweetsComponent', () => {
   });
 
   it('should show the tweets from service', () => {
-    spyOn(spec.inject(TweetManagerService), 'getTweets').and.returnValue([
-      'manam',
-      'love it',
+    spyOn(spec.inject(TweetManagerService), 'getListOfTweets').and.returnValue([
+      { message: 'manam' },
+      { message: 'love it' },
     ]);
     spec.detectChanges();
     const elIce = spec.queryAll('li');
