@@ -2,6 +2,7 @@ import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { CreateTweetComponent } from './create-tweet.component';
 import { CreateTweetModule } from './create-tweet.module';
 import { TweetUtils } from './create-tweet.utils';
+import { TweetManagerService } from '../services';
 
 describe('CreateTweetComponent (via Spectator)', () => {
   const create = createComponentFactory({
@@ -9,28 +10,32 @@ describe('CreateTweetComponent (via Spectator)', () => {
     imports: [CreateTweetModule],
     declareComponent: false,
   });
-  let spectator: Spectator<CreateTweetComponent>;
+  let spec: Spectator<CreateTweetComponent>;
   beforeEach(() => {
-    spectator = create();
+    spec = create();
   });
 
   it('should be truthy', () => {
-    expect(spectator.component).toBeTruthy();
+    expect(spec.component).toBeTruthy();
   });
 
   it('should show an input for tweet', () => {
-    expect(spectator.query('input[data-test="tweet"]')).toBeTruthy();
+    expect(spec.query('input[data-test="tweet"]')).toBeTruthy();
   });
 
   it('should show the postTweet button', () => {
-    expect(spectator.query('button[data-test="postTweet"]')).toBeTruthy();
+    expect(spec.query('button[data-test="postTweet"]')).toBeTruthy();
   });
 
-  it('should alert the inputted tweet on click of postTweet button', () => {
-    const INPUT_TWEET = 'hello achi';
-    spectator.typeInElement(INPUT_TWEET, 'input[data-test="tweet"]');
-    const logSpy = spyOn(TweetUtils, 'alertTweet');
-    spectator.click('button[data-test="postTweet"]');
-    expect(logSpy).toHaveBeenCalledWith(jasmine.stringContaining(INPUT_TWEET));
+  it('should delegate the adding of tweet to the relevant service', () => {
+    // arrange
+    const addTweet = spyOn(spec.inject(TweetManagerService), 'add');
+    // act
+    spec.typeInElement('something', '[data-test="tweet"]');
+    spec.click('[data-test="postTweet"]');
+    // assert
+    expect(addTweet).toHaveBeenCalledWith(
+      jasmine.stringContaining('something')
+    );
   });
 });

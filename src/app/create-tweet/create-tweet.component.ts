@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TweetUtils } from './create-tweet.utils';
+import { TweetManagerService } from '../services';
 
 @Component({
   selector: 'app-create-tweet',
@@ -9,8 +9,10 @@ import { TweetUtils } from './create-tweet.utils';
 export class CreateTweetComponent {
   tweet = '';
 
+  constructor(private readonly manager: TweetManagerService) {}
+
   onPostTweet(): void {
-    TweetUtils.alertTweet(this.buildTweet());
+    this.manager.add(this.buildTweet());
   }
 
   private buildTweet(): string {
