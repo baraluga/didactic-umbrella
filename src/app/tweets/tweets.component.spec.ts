@@ -1,22 +1,29 @@
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { of } from 'rxjs';
 import { TweetManagerService } from '../services';
 import { TweetsComponent } from './tweets.component';
 import { TweetsModule } from './tweets.module';
+
+const mockManager = () =>
+  ({
+    tweets$: of([
+      { message: 'manam', id: '1st' },
+      { message: 'love it', id: '2nd' },
+    ]),
+    delete: () => ({}),
+  } as unknown as TweetManagerService);
 
 describe('TweetsComponent', () => {
   const create = createComponentFactory({
     component: TweetsComponent,
     imports: [TweetsModule],
+    providers: [{ provide: TweetManagerService, useFactory: mockManager }],
     declareComponent: false,
   });
   let spec: Spectator<TweetsComponent>;
 
   beforeEach(() => {
     spec = create();
-    spyOn(spec.inject(TweetManagerService), 'getListOfTweets').and.returnValue([
-      { message: 'manam', id: '1st' },
-      { message: 'love it', id: '2nd' },
-    ]);
     spec.detectChanges();
   });
 
