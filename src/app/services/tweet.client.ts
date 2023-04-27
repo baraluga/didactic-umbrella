@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, catchError, of } from 'rxjs';
+import { Tweet } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -7,8 +9,8 @@ import { Injectable } from '@angular/core';
 export class TweetClient {
   constructor(private readonly http: HttpClient) {}
 
-  getAll(): void {
-    this.http.get(this.buildTweetsEndpoint());
+  getAll(): Observable<Tweet[]> {
+    return this.http.get<Tweet[]>(this.buildTweetsEndpoint());
   }
 
   private buildTweetsEndpoint(): string {
