@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Tweet } from '../models';
+import { PersistenceClient } from './tweet.tokens';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TweetClient {
+export class TweetClient implements PersistenceClient {
   constructor(private readonly http: HttpClient) {}
 
   getAll(): Observable<Tweet[]> {
