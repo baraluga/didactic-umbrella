@@ -8,6 +8,8 @@ import {
 } from '@angular/platform-browser-dynamic/testing';
 import { defineGlobalsInjections } from '@ngneat/spectator';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PERSISTENCE_CLIENT } from './app/services/tweet.tokens';
+import { TweetClient } from './app/services';
 
 declare const require: {
   context(
@@ -20,7 +22,10 @@ declare const require: {
   };
 };
 
-defineGlobalsInjections({ imports: [HttpClientTestingModule] });
+defineGlobalsInjections({
+  imports: [HttpClientTestingModule],
+  providers: [{ provide: PERSISTENCE_CLIENT, useClass: TweetClient }],
+});
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
