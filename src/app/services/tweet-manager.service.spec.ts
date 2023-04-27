@@ -6,6 +6,7 @@ import {
 import { TweetManagerService } from './tweet-manager.service';
 import { TweetClient } from './tweet.client';
 import { of, take } from 'rxjs';
+import { Tweet } from '../models';
 
 const mockClient = () =>
   ({
@@ -22,18 +23,37 @@ describe('TweetManagerService', () => {
 
   beforeEach(() => {
     spec = create();
+    spec
+      .inject(TweetClient)
+      .create.and.callFake((message: string) =>
+        of({ id: '', message } as Tweet)
+      );
     spec.service.addTweet(TEST_MESSAGE);
+  });
+
+  describe('when creating a new tweet...', () => {
+    it('should delegate the creation of a new tweet to the client', () => {
+      const createFn = spec.inject(TweetClient).create;
+      spec.service.addTweet('bombo!');
+      expect(createFn).toHaveBeenCalledWith('bombo!');
+    });
+
+    it('should insert the newly created tweet on succesful request of client', () => {
+      spec
+        .inject(TweetClient)
+        .create.and.returnValue(of({ id: '123' } as Tweet));
+      spec.service.addTweet('123');
+      expect(spec.service.getListOfTweets()).toContain(
+        jasmine.objectContaining({
+          id: '123',
+        })
+      );
+    });
   });
 
   it('should provide a way to add tweet by specifying the message', () => {
     spec.service.addTweet('mom!');
     expect(spec.service.getTweets()).toContain('mom!');
-  });
-
-  it('should delegate the creation of a new tweet to the client', () => {
-    const createFn = spec.inject(TweetClient).create;
-    spec.service.addTweet('bombo!');
-    expect(createFn).toHaveBeenCalledWith('bombo!');
   });
 
   it('should provide a way to list the running tweets', () => {

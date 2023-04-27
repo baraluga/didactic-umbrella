@@ -27,8 +27,10 @@ export class TweetManagerService {
   }
 
   addTweet(tweetMessage: string): void {
-    this.addToTweets(tweetMessage);
-    this.client.create(tweetMessage);
+    this.client
+      .create(tweetMessage)
+      .pipe(take(1))
+      .subscribe((tweet) => this.insertToTweets(tweet));
   }
 
   getTweets(): string[] {
@@ -72,11 +74,10 @@ export class TweetManagerService {
     this.tweetsState.next(current);
   }
 
-  private addToTweets(message: string): void {
-    const builtTweet = this.buildTweet(message);
+  private insertToTweets(tweet: Tweet): void {
     this.tweetsState.next({
       ...this.tweetsState.value,
-      [builtTweet.id]: builtTweet,
+      [tweet.id]: tweet,
     });
   }
 
