@@ -26,6 +26,17 @@ describe('TweetManagerService', () => {
     );
   });
 
+  it('should provide the stream of tweets', (done) => {
+    spec.service.tweets$.subscribe((tweets) => {
+      expect(tweets).toContain(
+        jasmine.objectContaining({
+          message: TEST_MESSAGE,
+        })
+      );
+    });
+    done();
+  });
+
   it('should provide a way to remove a tweet with the matching ID', () => {
     const tweets = spec.service.getListOfTweets();
     expect(tweets.length).toEqual(1);

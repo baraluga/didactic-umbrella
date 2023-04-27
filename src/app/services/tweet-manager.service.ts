@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Tweet, Tweets } from '../models';
 
 @Injectable({
@@ -7,13 +7,13 @@ import { Tweet, Tweets } from '../models';
 })
 export class TweetManagerService {
   private readonly tweetsState = new BehaviorSubject<Tweets>({});
+  readonly tweets$: Observable<Tweet[]> = this.getTweetsAsObservable();
 
   add(tweet: string): void {
     this.addTweet(tweet);
   }
 
   addTweet(tweetMessage: string): void {
-    const tweet = this.buildTweet(tweetMessage);
     this.addToTweets(tweetMessage);
   }
 
@@ -27,6 +27,10 @@ export class TweetManagerService {
 
   delete(id: string): void {
     this.removeFromTweets(id);
+  }
+
+  private getTweetsAsObservable(): Observable<Tweet[]> {
+    return this.tweetsState.pipe(map((tweets) => Object.values(tweets)));
   }
 
   private removeFromTweets(id: string): void {
