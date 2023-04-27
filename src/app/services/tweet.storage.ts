@@ -14,7 +14,16 @@ export class TweetStorage implements PersistenceClient {
     return of(this.getTweetsFromStorage());
   }
   create(message: string): Observable<Tweet> {
-    throw new Error('Method not implemented.');
+    const newTweet = { id: this.generateId(), message };
+    localStorage.setItem(
+      'tweets',
+      JSON.stringify([...this.getTweetsFromStorage(), newTweet])
+    );
+    return of(newTweet);
+  }
+
+  private generateId(): string {
+    return Math.random().toString();
   }
 
   private getTweetsFromStorage(): Tweet[] {

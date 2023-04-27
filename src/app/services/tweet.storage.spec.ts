@@ -29,4 +29,25 @@ describe('TweetStorage', () => {
       });
     });
   });
+
+  it('should put the to-be-created tweet with the given message', () => {
+    spyOn(localStorage, 'getItem').and.returnValue(
+      JSON.stringify([{ id: '123', message: 'hello' } as Tweet])
+    );
+    const setItem = spyOn(localStorage, 'setItem');
+    const stringify = spyOn(JSON, 'stringify').and.callThrough();
+    spec.service.create('another message');
+    expect(stringify).toHaveBeenCalledWith([
+      jasmine.objectContaining({
+        id: '123',
+      }),
+      jasmine.objectContaining({
+        message: 'another message',
+      }),
+    ]);
+    expect(setItem).toHaveBeenCalledWith(
+      'tweets',
+      jasmine.stringContaining('another message')
+    );
+  });
 });
