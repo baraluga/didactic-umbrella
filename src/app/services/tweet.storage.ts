@@ -1,6 +1,23 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { Tweet } from '../models';
+import { PersistenceClient } from './tweet.tokens';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TweetStorage {}
+export class TweetStorage implements PersistenceClient {
+  constructor() {
+    localStorage.getItem('');
+  }
+  getAll(): Observable<Tweet[]> {
+    return of(this.getTweetsFromStorage());
+  }
+  create(message: string): Observable<Tweet> {
+    throw new Error('Method not implemented.');
+  }
+
+  private getTweetsFromStorage(): Tweet[] {
+    return JSON.parse(localStorage.getItem('tweets') || '[]');
+  }
+}
