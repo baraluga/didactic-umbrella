@@ -4,20 +4,28 @@ import 'zone.js/testing';
 import { getTestBed } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
+  platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
+import { defineGlobalsInjections } from '@ngneat/spectator';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 declare const require: {
-  context(path: string, deep?: boolean, filter?: RegExp): {
+  context(
+    path: string,
+    deep?: boolean,
+    filter?: RegExp
+  ): {
     <T>(id: string): T;
     keys(): string[];
   };
 };
 
+defineGlobalsInjections({ imports: [HttpClientTestingModule] });
+
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting(),
+  platformBrowserDynamicTesting()
 );
 
 // Then we find all the tests.
