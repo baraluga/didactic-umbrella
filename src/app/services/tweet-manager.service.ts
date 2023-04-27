@@ -1,15 +1,7 @@
-import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  map,
-  of,
-  take,
-  takeUntil,
-} from 'rxjs';
+import { Inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, map, take } from 'rxjs';
 import { Tweet, Tweets } from '../models';
-import { TweetClient } from './tweet.client';
+import { PERSISTENCE_CLIENT, PersistenceClient } from './tweet.tokens';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +10,9 @@ export class TweetManagerService {
   private readonly tweetsState = new BehaviorSubject<Tweets>({});
   readonly tweets$: Observable<Tweet[]> = this.getTweetsAsObservable();
 
-  constructor(private readonly client: TweetClient) {
+  constructor(
+    @Inject(PERSISTENCE_CLIENT) private readonly client: PersistenceClient
+  ) {
     this.subscribeToTweetsClientForInitialization();
   }
 

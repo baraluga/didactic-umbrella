@@ -1,47 +1,42 @@
-import {
-  createServiceFactory,
-  mockProvider,
-  SpectatorService,
-} from '@ngneat/spectator';
-import { TweetManagerService } from './tweet-manager.service';
-import { TweetClient } from './tweet.client';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { of, take } from 'rxjs';
 import { Tweet } from '../models';
+import { TweetManagerService } from './tweet-manager.service';
+import { PERSISTENCE_CLIENT, PersistenceClient } from './tweet.tokens';
 
 const mockClient = () =>
   ({
     getAll: () => of([{ id: 'id1', message: 'message1' }]),
-  } as unknown as TweetClient);
+    create: (message: string) => of({ id: '', message } as Tweet),
+  } as unknown as PersistenceClient);
 
 describe('TweetManagerService', () => {
   const TEST_MESSAGE = 'hello';
   const create = createServiceFactory({
     service: TweetManagerService,
-    providers: [mockProvider(TweetClient, mockClient())],
+    providers: [{ provide: PERSISTENCE_CLIENT, useValue: mockClient() }],
   });
   let spec: SpectatorService<TweetManagerService>;
 
   beforeEach(() => {
     spec = create();
-    spec
-      .inject(TweetClient)
-      .create.and.callFake((message: string) =>
-        of({ id: '', message } as Tweet)
-      );
     spec.service.addTweet(TEST_MESSAGE);
   });
 
   describe('when creating a new tweet...', () => {
     it('should delegate the creation of a new tweet to the client', () => {
-      const createFn = spec.inject(TweetClient).create;
+      const createFn = spyOn(
+        spec.inject(PERSISTENCE_CLIENT),
+        'create'
+      ).and.callThrough();
       spec.service.addTweet('bombo!');
       expect(createFn).toHaveBeenCalledWith('bombo!');
     });
 
     it('should insert the newly created tweet on succesful request of client', () => {
-      spec
-        .inject(TweetClient)
-        .create.and.returnValue(of({ id: '123' } as Tweet));
+      spyOn(spec.inject(PERSISTENCE_CLIENT), 'create').and.returnValue(
+        of({ id: '123' } as Tweet)
+      );
       spec.service.addTweet('123');
       expect(spec.service.getListOfTweets()).toContain(
         jasmine.objectContaining({
