@@ -28,6 +28,7 @@ export class TweetManagerService {
 
   addTweet(tweetMessage: string): void {
     this.addToTweets(tweetMessage);
+    this.client.create(tweetMessage);
   }
 
   getTweets(): string[] {

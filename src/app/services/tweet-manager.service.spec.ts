@@ -30,6 +30,12 @@ describe('TweetManagerService', () => {
     expect(spec.service.getTweets()).toContain('mom!');
   });
 
+  it('should delegate the creation of a new tweet to the client', () => {
+    const createFn = spec.inject(TweetClient).create;
+    spec.service.addTweet('bombo!');
+    expect(createFn).toHaveBeenCalledWith('bombo!');
+  });
+
   it('should provide a way to list the running tweets', () => {
     spec.service.add('dad!');
     expect(spec.service.getListOfTweets()).toContain(
