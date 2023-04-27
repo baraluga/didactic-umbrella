@@ -13,6 +13,17 @@ export class TweetClient {
     return this.http.get<Tweet[]>(this.buildTweetsEndpoint());
   }
 
+  create(message: string): Observable<Tweet> {
+    return this.http.post<Tweet>(
+      this.buildTweetsEndpoint(),
+      this.buildTweet(message)
+    );
+  }
+
+  private buildTweet(message: string): Tweet {
+    return { message, id: Math.random().toString() };
+  }
+
   private buildTweetsEndpoint(): string {
     return `${this.buildBaseUrl()}/tweets`;
   }

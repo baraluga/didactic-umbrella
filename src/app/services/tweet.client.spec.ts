@@ -13,11 +13,32 @@ describe('TweetClientService', () => {
     spec = create();
   });
 
-  describe('when getting all tweets...', () => {
-    it('should make a GET request from the correct endpoint', () => {
-      const getFn = spec.inject(HttpClient).get;
-      spec.service.getAll();
-      expect(getFn).toHaveBeenCalledWith(jasmine.stringContaining('tweets'));
+  it('should make a GET request from the correct endpoint when getting all tweets', () => {
+    const getFn = spec.inject(HttpClient).get;
+    spec.service.getAll();
+    expect(getFn).toHaveBeenCalledWith(jasmine.stringContaining('tweets'));
+  });
+
+  describe('when adding a new tweet...', () => {
+    it('should make a POST request to the corerct endpoint', () => {
+      const postFn = spec.inject(HttpClient).post;
+      spec.service.create('hello!');
+      expect(postFn).toHaveBeenCalledWith(
+        jasmine.stringContaining('tweets'),
+        jasmine.anything()
+      );
+    });
+
+    it('should make a POST request with the message as payload', () => {
+      const postFn = spec.inject(HttpClient).post;
+      spec.service.create('hello!');
+      expect(postFn).toHaveBeenCalledWith(
+        jasmine.any(String),
+        jasmine.objectContaining({
+          message: 'hello!',
+          id: jasmine.any(String),
+        })
+      );
     });
   });
 });
