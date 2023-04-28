@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { startWith } from 'rxjs/operators';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { TweetManagerService } from '../services';
 
 @Component({
@@ -14,8 +18,8 @@ export class CreateTweetComponent {
   readonly handleControl: FormControl = new FormControl('');
 
   readonly tweetForm: FormGroup = new FormGroup({
-    message: new FormControl('', Validators.required),
-    handle: new FormControl('', Validators.required),
+    message: new FormControl('', Validators.maxLength(10)),
+    handle: new FormControl('', this.onlySpecificHandle('dale')),
   });
 
   constructor(private readonly manager: TweetManagerService) {}
@@ -34,5 +38,11 @@ export class CreateTweetComponent {
 
   private buildTweet(): string {
     return `tweet: ${this.getCurrentTweet()}`;
+  }
+
+  private onlySpecificHandle(handle: string): ValidatorFn {
+    return (control: AbstractControl) => {
+      return control.value === handle ? null : { invalidHandle: true };
+    };
   }
 }

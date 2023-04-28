@@ -5,4 +5,10 @@
   <input data-test="tweet" formControlName="message" />
 </form>
 
-<button data-test="postTweet" (click)="onPostTweet()">Post Tweet</button>
+<button
+  data-test="postTweet"
+  (click)="onPostTweet()"
+  [disabled]="tweetForm.invalid"
+>
+  Post Tweet
+</button>

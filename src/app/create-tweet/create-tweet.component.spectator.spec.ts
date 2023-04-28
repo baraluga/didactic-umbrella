@@ -36,15 +36,28 @@ describe('CreateTweetComponent (via Spectator)', () => {
     expect(spec.query('button[data-test="postTweet"]')).toBeTruthy();
   });
 
-  it('should delegate the adding of tweet to the relevant service', () => {
-    // arrange
-    const addTweet = spyOn(spec.inject(TweetManagerService), 'add');
-    // act
-    spec.typeInElement('something', '[data-test="tweet"]');
-    spec.click('[data-test="postTweet"]');
-    // assert
-    expect(addTweet).toHaveBeenCalledWith(
-      jasmine.stringContaining('something')
-    );
+  describe('when attempting to post a tweet...', () => {
+    it('should enable the postTweet button if both message and handle are valid', () => {
+      const addFn = spyOn(spec.inject(TweetManagerService), 'add');
+      spec.typeInElement('something', '[data-test="tweet"]');
+      spec.typeInElement('dale', '[data-test="handle"]');
+      spec.click('[data-test="postTweet"]');
+      expect(addFn).toHaveBeenCalledWith(jasmine.stringContaining('something'));
+    });
+
+    it('should disable the post button if message is invalid even if handle is valid', () => {
+      spec.typeInElement(
+        'something is gone from the world',
+        '[data-test="tweet"]'
+      );
+      spec.typeInElement('dale', '[data-test="handle"]');
+      expect(spec.query('button[data-test="postTweet"]')).toBeDisabled();
+    });
+
+    it('should disable the post if handle is invalid even if message is valid', () => {
+      spec.typeInElement('something', '[data-test="tweet"]');
+      spec.typeInElement('baraluga', '[data-test="handle"]');
+      expect(spec.query('button[data-test="postTweet"]')).toBeDisabled();
+    });
   });
 });
