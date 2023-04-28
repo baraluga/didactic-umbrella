@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tweet-bar',
   templateUrl: './tweet-bar.component.html',
-  styleUrls: ['./tweet-bar.component.scss']
+  styleUrls: ['./tweet-bar.component.scss'],
 })
-export class TweetBarComponent implements OnInit {
+export class TweetBarComponent {
+  constructor(private readonly router: Router) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
+  onHomeClick(): void {
+    this.router.navigate(['home']);
   }
 
+  onCreateClick(): void {
+    this.router.navigate(['create']);
+  }
 }

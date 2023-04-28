@@ -1,1 +1,7 @@
-<p>tweet-bar works!</p>
+<div>
+  <div>
+    <a data-test="home" (click)="onHomeClick()"> HOME </a>
+    <a data-test="createTweet" (click)="onCreateClick()">CREATE TWEET</a>
+  </div>
+  <ng-content></ng-content>
+</div>

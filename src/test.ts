@@ -1,15 +1,15 @@
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
-
 import 'zone.js/testing';
+// keep on top
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { getTestBed } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { defineGlobalsInjections } from '@ngneat/spectator';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { PERSISTENCE_CLIENT } from './app/services/tweet.tokens';
 import { TweetClient } from './app/services';
+import { PERSISTENCE_CLIENT } from './app/services/tweet.tokens';
 
 declare const require: {
   context(
@@ -23,7 +23,7 @@ declare const require: {
 };
 
 defineGlobalsInjections({
-  imports: [HttpClientTestingModule],
+  imports: [HttpClientTestingModule, RouterTestingModule],
   providers: [{ provide: PERSISTENCE_CLIENT, useClass: TweetClient }],
 });
 
