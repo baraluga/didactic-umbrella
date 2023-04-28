@@ -17,4 +17,8 @@ describe('AppComponent', () => {
   it('should instantiate beautifully', () => {
     expect(spec.component).toBeTruthy();
   });
+
+  it('should show the tweet-bar', () => {
+    expect(spec.query('app-tweet-bar')).toExist();
+  });
 });

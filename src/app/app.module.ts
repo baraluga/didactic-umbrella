@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { CreateTweetModule } from './create-tweet/create-tweet.module';
 import { TweetClient } from './services';
 import { PERSISTENCE_CLIENT } from './services/tweet.tokens';
+import { TweetBarModule } from './tweet-bar';
 import { TweetsModule } from './tweets/tweets.module';
 
 @NgModule({
@@ -17,6 +18,7 @@ import { TweetsModule } from './tweets/tweets.module';
     CreateTweetModule,
     TweetsModule,
     HttpClientModule,
+    TweetBarModule,
   ],
   providers: [{ provide: PERSISTENCE_CLIENT, useClass: TweetClient }],
   bootstrap: [AppComponent],
