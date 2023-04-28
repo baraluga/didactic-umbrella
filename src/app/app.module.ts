@@ -5,9 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateTweetModule } from './create-tweet/create-tweet.module';
-import { TweetsModule } from './tweets/tweets.module';
-import { PERSISTENCE_CLIENT } from './services/tweet.tokens';
 import { TweetClient } from './services';
+import { PERSISTENCE_CLIENT } from './services/tweet.tokens';
+import { TweetsModule } from './tweets/tweets.module';
 
 @NgModule({
   declarations: [AppComponent],

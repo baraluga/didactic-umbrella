@@ -1,8 +1,7 @@
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { TweetManagerService } from '../services';
 import { CreateTweetComponent } from './create-tweet.component';
 import { CreateTweetModule } from './create-tweet.module';
-import { TweetUtils } from './create-tweet.utils';
-import { TweetManagerService } from '../services';
 
 describe('CreateTweetComponent (via Spectator)', () => {
   const create = createComponentFactory({
@@ -17,6 +16,16 @@ describe('CreateTweetComponent (via Spectator)', () => {
 
   it('should be truthy', () => {
     expect(spec.component).toBeTruthy();
+  });
+
+  it('should keep track of the inputted handle', () => {
+    spec.typeInElement('baraluga', '[data-test="handle"]');
+    expect(spec.component.getCurrentHandle()).toEqual('baraluga');
+  });
+
+  it('should keep track of the inputted tweet', () => {
+    spec.typeInElement('something', '[data-test="tweet"]');
+    expect(spec.component.getCurrentTweet()).toEqual('something');
   });
 
   it('should show an input for tweet', () => {

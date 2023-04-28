@@ -1,2 +1,8 @@
-<input data-test="tweet" [(ngModel)]="tweet" />
+<!-- handle -->
+<form [formGroup]="tweetForm">
+  <input data-test="handle" formControlName="handle" />
+  <!-- tweet -->
+  <input data-test="tweet" formControlName="message" />
+</form>
+
 <button data-test="postTweet" (click)="onPostTweet()">Post Tweet</button>
