@@ -11,7 +11,10 @@ describe('TweetsResolver', () => {
   });
 
   it('should request for the tweets on resolve', () => {
-    const fetchTweets = spyOn(spec.inject(TweetManagerService), 'fetchTweets');
+    const fetchTweets = spyOn(
+      spec.inject(TweetManagerService),
+      'fetchTweets'
+    ).and.callThrough();
     spec.service.resolve();
     expect(fetchTweets).toHaveBeenCalled();
   });
