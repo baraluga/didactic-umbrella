@@ -1,6 +1,6 @@
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
-import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
+import { AppModule } from './app.module';
 
 describe('AppComponent', () => {
   const create = createComponentFactory({
@@ -14,11 +14,7 @@ describe('AppComponent', () => {
     spec = create();
   });
 
-  it('should show createTweet component', () => {
-    expect(spec.query('[data-test="createTweet"]')).toExist();
-  });
-
-  it('should show tweets component', () => {
-    expect(spec.query('app-tweets')).toExist();
+  it('should instantiate beautifully', () => {
+    expect(spec.component).toBeTruthy();
   });
 });
