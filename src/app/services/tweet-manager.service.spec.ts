@@ -1,5 +1,5 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { of, take } from 'rxjs';
+import { of } from 'rxjs';
 import { Tweet } from '../models';
 import { TweetManagerService } from './tweet-manager.service';
 import { PERSISTENCE_CLIENT, PersistenceClient } from './tweet.tokens';
@@ -70,17 +70,6 @@ describe('TweetManagerService', () => {
       );
     });
     done();
-  });
-
-  it('should initialize the state with the data from TweetClient', (done) => {
-    spec.service.tweets$.pipe(take(1)).subscribe((tweets) => {
-      expect(tweets).toContain(
-        jasmine.objectContaining({
-          id: 'id1',
-        })
-      );
-      done();
-    });
   });
 
   it('should provide a way to remove a tweet with the matching ID', () => {

@@ -12,9 +12,7 @@ export class TweetManagerService {
 
   constructor(
     @Inject(PERSISTENCE_CLIENT) private readonly client: PersistenceClient
-  ) {
-    this.subscribeToTweetsClientForInitialization();
-  }
+  ) {}
 
   add(tweet: string): void {
     this.addTweet(tweet);
@@ -37,25 +35,6 @@ export class TweetManagerService {
 
   delete(id: string): void {
     this.removeFromTweets(id);
-  }
-
-  private subscribeToTweetsClientForInitialization(): void {
-    this.client
-      .getAll()
-      .pipe(
-        map((tweets) => this.reduceTweetsUsingId(tweets)),
-        take(1)
-      )
-      .subscribe((tweets: Tweets) => {
-        this.tweetsState.next(tweets);
-      });
-  }
-
-  private reduceTweetsUsingId(tweet: Tweet[]): Tweets {
-    return tweet.reduce((acc, curr) => {
-      acc[curr.id] = curr;
-      return acc;
-    }, {} as Tweets);
   }
 
   private getTweetsAsObservable(): Observable<Tweet[]> {
