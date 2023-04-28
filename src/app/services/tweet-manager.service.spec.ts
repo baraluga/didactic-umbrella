@@ -83,4 +83,27 @@ describe('TweetManagerService', () => {
       })
     );
   });
+
+  describe('when fetching for all tweets...', () => {
+    it('should delegate the actual fetching to client', () => {
+      const getAllFn = spyOn(
+        spec.inject(PERSISTENCE_CLIENT),
+        'getAll'
+      ).and.returnValue(of());
+      spec.service.fetchTweets();
+      expect(getAllFn).toHaveBeenCalled();
+    });
+
+    it('should insert the existing tweets from the client to the state', () => {
+      spyOn(spec.inject(PERSISTENCE_CLIENT), 'getAll').and.returnValue(
+        of([{ id: 'id1', message: 'message1' }])
+      );
+      spec.service.fetchTweets().subscribe();
+      expect(spec.service.getListOfTweets()).toEqual([
+        jasmine.objectContaining({
+          id: 'id1',
+        }),
+      ]);
+    });
+  });
 });

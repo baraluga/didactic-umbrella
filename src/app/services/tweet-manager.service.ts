@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, take } from 'rxjs';
+import { BehaviorSubject, Observable, map, take, tap } from 'rxjs';
 import { Tweet, Tweets } from '../models';
 import { PERSISTENCE_CLIENT, PersistenceClient } from './tweet.tokens';
 
@@ -25,6 +25,10 @@ export class TweetManagerService {
       .subscribe((tweet) => this.insertToTweets(tweet));
   }
 
+  fetchTweets(): Observable<unknown> {
+    return this.client.getAll().pipe(tap((tweets) => this.setTweets(tweets)));
+  }
+
   getTweets(): string[] {
     return this.listTweets();
   }
@@ -35,6 +39,14 @@ export class TweetManagerService {
 
   delete(id: string): void {
     this.removeFromTweets(id);
+  }
+
+  private setTweets(tweets: Tweet[]): void {
+    const reduced = tweets.reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {} as Tweets);
+    this.tweetsState.next(reduced);
   }
 
   private getTweetsAsObservable(): Observable<Tweet[]> {
